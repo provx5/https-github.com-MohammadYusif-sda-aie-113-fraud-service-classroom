@@ -80,6 +80,6 @@ class FraudScorer:
             proba_matrix = self.model.predict_proba(features_df)
             fraud_prob = proba_matrix[0][1]
             return float(fraud_prob)
-        except (ValueError, IndexError, TypeError, KeyError) as e:
+        except Exception as e:  # noqa: BLE001 - fail closed for model issues
             logger.warning(f"Score prediction failed for {enriched.transaction_id}: {e}")
             return 0.0

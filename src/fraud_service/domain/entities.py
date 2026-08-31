@@ -1,6 +1,7 @@
 """Domain entities for fraud scoring."""
 
 import math
+import re
 from datetime import datetime
 
 from pydantic import BaseModel, Field
@@ -38,12 +39,15 @@ class FraudScore(BaseModel):
 
 def enrich_transaction(raw: Transaction) -> EnrichedTransaction:
     """Extract and compute features from a raw transaction.
-    
+
     Uses log1p transform (not log10) to match the model's training data.
+    Normalises channel and merchant-category strings so feature values remain
+    stable across casing and whitespace differences at the serving boundary.
     """
     amount_log = math.log1p(raw.amount_sar)
-    mcc = raw.merchant_category.strip().upper().replace(" ", "_")
-    
+    channel = raw.channel.strip().lower()
+    mcc = re.sub(r"\s+", "_", raw.merchant_category.strip().upper())
+
     # Parse ISO 8601 timestamp (may have Z suffix or +00:00)
     timestamp_str = raw.timestamp
     if timestamp_str.endswith("Z"):
@@ -51,11 +55,11 @@ def enrich_transaction(raw: Transaction) -> EnrichedTransaction:
     timestamp = datetime.fromisoformat(timestamp_str)
     hour_of_day = timestamp.hour
     is_night = 1 if hour_of_day < 6 else 0
-    
+
     return EnrichedTransaction(
         transaction_id=raw.transaction_id,
         amount_log=amount_log,
-        channel=raw.channel,
+        channel=channel,
         mcc=mcc,
         hour_of_day=hour_of_day,
         is_night=is_night,
