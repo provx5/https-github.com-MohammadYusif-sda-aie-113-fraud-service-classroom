@@ -1,6 +1,7 @@
 """Batch scoring entry point."""
 
 import logging
+import sys
 from pathlib import Path
 
 import pandas as pd
@@ -10,7 +11,7 @@ from fraud_service.domain.entities import Transaction
 from fraud_service.domain.policies import FraudPolicy
 from fraud_service.service.scorer import FraudScorer
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 logger = logging.getLogger(__name__)
 
 
