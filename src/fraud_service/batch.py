@@ -1,6 +1,7 @@
 """Batch scoring entry point."""
 
 import logging
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -17,8 +18,8 @@ logger = logging.getLogger(__name__)
 def main():
     """Load model, score transactions from CSV, write results."""
     
-    # Find data and model paths relative to repo root
-    repo_root = Path(__file__).parent.parent.parent
+    # Resolve assets from the runtime root rather than the installed package path.
+    repo_root = Path(os.environ.get("FRAUD_SERVICE_ROOT", Path.cwd()))
     data_path = repo_root / "data" / "transactions_sample.csv"
     model_path = repo_root / "models" / "fraud_xgb_v3.joblib"
     output_path = repo_root / "scored.csv"
