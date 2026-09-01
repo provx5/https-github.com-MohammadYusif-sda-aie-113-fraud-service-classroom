@@ -28,4 +28,4 @@ def test_batch_entrypoint_runs_and_writes_results():
     assert {"transaction_id", "score", "decision"}.issubset(scored.columns)
     assert len(scored) == 5000
     assert set(scored["decision"]).issubset({"allow", "review", "block"})
-    assert "Wrote 5000 scores" in completed.stdout
+    assert "scoring_complete" in completed.stderr
