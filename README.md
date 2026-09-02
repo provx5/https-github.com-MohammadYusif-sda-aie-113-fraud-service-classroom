@@ -24,3 +24,12 @@ Data and model artefacts are already provided and stay constant across every lab
 - `models/fraud_xgb_v3.joblib` — pre-trained pipeline bundle: `{"pipeline": ..., "version": "v3.2.0"}`.
 - `data/golden_scores_v3.csv` — this model's scores on the 5,000 rows, used from
   Module 4 onward as the skew tripwire.
+
+
+  
+————————
+
+saad 
+ممارسات هندسة البرمجيات لأنظمة الذكاء الاصطناعي
+https://github.com/SDAIAAcademy
+
